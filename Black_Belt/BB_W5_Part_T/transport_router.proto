@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+import "graph.proto";
+
+package TCProto;
+
+message RoutingSettings {
+  int32 bus_wait_time = 1;
+  double bus_velocity = 2;
+}
+
+message StopVertexIds {
+  string name = 1;
+  uint32 in = 2;
+  uint32 out = 3;
+}
+
+message StopVertexInfo {
+  string stop_name = 1;
+}
+
+message CompanyVertexInfo {
+  uint32 company_id = 1;
+}
+
+message VertexInfo {
+  oneof data {
+    StopVertexInfo stop_data = 1;
+    CompanyVertexInfo company_data= 2;
+  }
+}
+
+message BusEdgeInfo {
+  string bus_name = 1;
+  uint32 start_stop_idx = 2;
+  uint32 finish_stop_idx = 3;
+}
+
+message WaitEdgeInfo {}
+
+message CompanyEdgeInfo {
+  string stop_name = 1;
+  uint32 company_id = 2;
+}
+
+message EdgeInfo {
+  oneof data {
+    BusEdgeInfo bus_data = 1;
+    WaitEdgeInfo wait_data = 2;
+    CompanyEdgeInfo company_data = 3;
+  }
+}
+
+message TransportRouter {
+  RoutingSettings routing_settings = 1;
+  GraphProto.DirectedWeightedGraph graph = 2;
+  GraphProto.Router router = 3;
+  repeated StopVertexIds stops_vertex_ids = 4;
+  repeated uint32 companies_vertex_id = 7;
+  repeated VertexInfo vertices_info = 5;
+  repeated EdgeInfo edges_info = 6;
+}
+
